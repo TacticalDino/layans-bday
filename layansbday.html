@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Layan's Birthday Surprise</title>
+    <style>
+        #video-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div id="video-container">
+        <iframe width="320" height="180" src="https://www.youtube.com/embed/iLOyBCN6EzU?autoplay=1" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <h1>Layan, Today You Are <span id="age"></span> old!</h1>
+    <h2>Happy <span id="currentAge"></span>th Birthday!</h2>
+    <h3>Check out these special surprises:</h3>
+    <ul>
+        <li><a href="https://www.example.com/gift-from-salameh" target="_blank">Do You Like Desmos?</a></li>
+        <li><a href="https://r.mtdv.me/happy-bday-layan" target="_blank" onclick="showApology()">A Secret</a></li>
+        <li id="apology" style="display: none;">I'm So Sorry</li>
+    </ul>
+
+    <p>Time until next birthday: <span id="countdown"></span></p>
+
+    <script>
+        function showApology() {
+            document.getElementById("apology").style.display = "block";
+        }
+
+        var options = {timeZone: 'Asia/Jerusalem', hour12: false};
+        var birthdayString = "2008-03-07T11:00:00";
+        var todayString = new Date().toLocaleString('en-US', options);
+        
+        var birthday = new Date(birthdayString);
+        var today = new Date(todayString);
+        
+        var ageYears = today.getFullYear() - birthday.getFullYear();
+        var ageMonths = today.getMonth() - birthday.getMonth();
+        var ageDays = today.getDate() - birthday.getDate();
+        var ageHours = today.getHours() - birthday.getHours();
+        var ageMinutes = today.getMinutes() - birthday.getMinutes();
+
+        if (ageMonths < 0 || (ageMonths === 0 && today.getDate() < birthday.getDate())) {
+            ageYears--;
+            ageMonths += 12;
+        }
+
+        if (ageDays < 0) {
+            ageMonths--;
+            var prevMonthDate = new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+            ageDays += prevMonthDate;
+        }
+
+        if (ageHours < 0) {
+            ageDays--;
+            ageHours += 24;
+        }
+
+        if (ageMinutes < 0) {
+            ageHours--;
+            ageMinutes += 60;
+        }
+
+        var ageDisplay = ageYears + " Years";
+        if (ageMonths > 0) {
+            ageDisplay += ", " + ageMonths + " Months";
+        }
+        if (ageDays > 0) {
+            ageDisplay += ", " + ageDays + " Days";
+        }
+        if (ageHours > 0) {
+            ageDisplay += ", " + ageHours + " Hours";
+        }
+        if (ageMinutes > 0) {
+            ageDisplay += ", " + ageMinutes + " Minutes";
+        }
+
+        document.getElementById("age").innerHTML = ageDisplay;
+
+        document.getElementById("currentAge").innerHTML = ageYears + 1;
+
+        var nextBirthday = new Date(today.getFullYear(), birthday.getMonth(), birthday.getDate(), birthday.getHours(), birthday.getMinutes());
+        if (today.getTime() > nextBirthday.getTime()) {
+            nextBirthday.setFullYear(nextBirthday.getFullYear() + 1);
+        }
+
+        var timeUntilNextBirthday = nextBirthday.getTime() - today.getTime();
+        var daysUntilNextBirthday = Math.floor(timeUntilNextBirthday / (1000 * 60 * 60 * 24));
+        var hoursUntilNextBirthday = Math.floor((timeUntilNextBirthday % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutesUntilNextBirthday = Math.floor((timeUntilNextBirthday % (1000 * 60 * 60)) / (1000 * 60));
+
+        var countdownDisplay = "";
+        if (daysUntilNextBirthday > 0) {
+            countdownDisplay += daysUntilNextBirthday + " Days ";
+        }
+        if (hoursUntilNextBirthday > 0) {
+            countdownDisplay += hoursUntilNextBirthday + " Hours ";
+        }
+        if (minutesUntilNextBirthday > 0) {
+            countdownDisplay += minutesUntilNextBirthday + " Minutes ";
+        }
+
+        document.getElementById("countdown").innerHTML = countdownDisplay.trim();
+    </script>
+</body>
+</html>
